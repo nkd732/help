@@ -24,4 +24,9 @@ router
   .route('/view-month-events')
   .get(eventController.viewMonthEvents);
 
+router
+  .route('/test')
+  .get(eventController.testRoute);
+
+
 module.exports = router;

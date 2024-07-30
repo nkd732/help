@@ -17,7 +17,7 @@ const Event = sequelize.define('Event', {
     allowNull: false
   },
   event_type: {
-    type: DataTypes.ENUM('GSB', 'personal'),
+    type: DataTypes.STRING(20),
     allowNull: false
   },
   event_details: {

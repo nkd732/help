@@ -1,15 +1,15 @@
 const dotenv = require('dotenv');
 const path = require('path');
 const Joi = require('joi');
-const { Sequelize } = require('sequelize');
+// const { Sequelize } = require('sequelize');
 
-const sequelize = new Sequelize('instilite_24', 'root', 'password', {
-    host: 'localhost',
-    dialect: 'mysql',
-    logging: console.log // Enable logging to see the SQL queries
-});
+// const sequelize = new Sequelize('instilite_24', 'root', 'password', {
+//     host: 'localhost',
+//     dialect: 'mysql',
+//     logging: console.log // Enable logging to see the SQL queries
+// });
 
-module.exports = sequelize;
+// module.exports = sequelize;
 
 
 dotenv.config({ path: path.join(__dirname, '../../.env') });

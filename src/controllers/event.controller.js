@@ -14,46 +14,46 @@ const sequelize = new Sequelize(config.mysql.database, config.mysql.username, co
   });
   
 const addEvent = catchAsync(async (req, res) => {
-    const event_id = uuidv4(); // Generate a unique ID for the event
-    const {
-        event_name,
-        event_type,
-        event_details,
-        start_time,
-        end_time,
-        venue,
-        created_by
-    } = req.body;
+    try {
+        const {
+            event_name,
+            event_type,
+            event_details,
+            start_time,
+            end_time,
+            venue,
+            created_by
+        } = req.body;
 
-    // Automatically set these fields
-    const created_at = new Date();
-    const updated_at = new Date();
+        // Automatically set these fields
+        const created_at = new Date();
+        const updated_at = new Date();
 
-    // Event data structure
-    const eventData = {
-        event_id,
-        event_name,
-        event_type,
-        event_details,
-        start_time,
-        end_time,
-        venue,
-        created_by,
-        created_at,
-        updated_at
-    };
+        // Event data structure
+        const eventData = {
+            event_id: uuidv4(), // Generate a unique ID for the event
+            event_name,
+            event_type,
+            event_details,
+            start_time,
+            end_time,
+            venue,
+            created_by,
+            created_at,
+            updated_at
+        };
 
-    const sql = 'INSERT INTO events SET ?';
-    db.query(sql, eventData, (err, result) => {
-        if (err) {
-            console.error('Error inserting data into database:', err);
-            return res.status(500).send('Server error');
-        }
-        console.log('Data inserted:', result);
+        // Insert data using Sequelize
+        const newEvent = await Event.create(eventData);
         res.send('Event added successfully');
-    });
+    } catch (err) {
+        console.error('Error inserting data into database:',  err.message, err.stack);
+        res.status(500).send('Server error');
+    }
 });
 
+
+//function to get the events added to the table in the last 24 hours to show whats new
 const whatsNewEvents = catchAsync(async (req, res) => {
     try {
       const query = "SELECT * FROM events WHERE created_at >= NOW() - INTERVAL 24 HOUR";
@@ -72,8 +72,7 @@ const whatsNewEvents = catchAsync(async (req, res) => {
       console.error("Error executing SQL query:", err);
       res.status(500).json({ error: "Internal server error" });
     }
-});
-
+  });
 
 const viewDayEvents = catchAsync(async (req, res) => {
     const eventType = req.query.event_type; // Can be 'GSB', 'personal', or empty (both)
@@ -213,12 +212,16 @@ const viewMonthEvents = catchAsync(async (req, res) => {
     }
 });
 
+const testRoute = catchAsync(async (req, res) => {
+    res.send('Test route works!');
+  });
 
 module.exports = {
     addEvent,
     whatsNewEvents,
     viewDayEvents,
-    viewMonthEvents
+    viewMonthEvents,
+    testRoute
 };
 
   
